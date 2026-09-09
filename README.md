@@ -52,7 +52,7 @@ Then open the local URL Streamlit prints in your terminal (typically `http://loc
 
 1. **Add a topic** you're studying.
 2. Recall schedules your first review for the next day.
-3. Each time you successfully recall the material, the interval expands (1 → 3 → 7 → 14 → 30 → 90 → 180 → 365 days), reinforcing long-term retention while minimizing unnecessary review time.
+3. Each time you successfully recall the material, the interval expands, reinforcing long-term retention while minimizing unnecessary review time.
 4. If you forget a topic, it resets to an earlier interval so you get more frequent practice until it sticks.
 
 ## Contributing
