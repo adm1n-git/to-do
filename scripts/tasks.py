@@ -21,6 +21,27 @@ def str2dt(str):
     return datetime.strptime(str, r"%Y-%m-%d %H:%M:%S")
 
 def get():
+    # create an SQLite table to_do with id, topic, created_at and recall days columns
+
+    db.exec_query(
+        query = 
+            """
+            CREATE TABLE IF NOT EXISTS to_do (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                topic TEXT UNIQUE,
+                created_at TEXT,
+                day_1 INTEGER DEFAULT 0,
+                day_3 INTEGER DEFAULT 0,
+                day_7 INTEGER DEFAULT 0,
+                day_14 INTEGER DEFAULT 0,
+                day_30 INTEGER DEFAULT 0,
+                day_90 INTEGER DEFAULT 0,
+                day_180 INTEGER DEFAULT 0,
+                day_365 INTEGER DEFAULT 0
+            )
+            """
+    )
+
     # get the records from the table to_do
 
     records = db.exec_query(
