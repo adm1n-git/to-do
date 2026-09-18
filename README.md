@@ -19,11 +19,16 @@ to-do/
     ├── recall/
     │   ├── update.py                   # Add a new topic to track
     │   └── tasks.py                    # Review topics due for recall
-    ├── fix-text/
+    ├── others/
     │   └── fix-text.py                 # Grammar-fix / rephrase tool
     └── support/
+        ├── README.md                   # Docs for the support package
+        ├── __init__.py                 # Re-exports send_message, sqlite_database, dt2str, str2dt
+        ├── requirements.txt            # Support package's own dependency (msal)
         ├── microsoft_graph_api/        # Helper for sending mail via MS Graph API
-        └── sqlite_database/            # Lightweight SQLite wrapper class
+        ├── sqlite_database/            # Lightweight SQLite wrapper class
+        └── others/
+            └── dt.py                   # datetime <-> string helpers
 ```
 
 ## Requirements
@@ -152,3 +157,9 @@ The app will open in your browser (default: `http://localhost:8501`). You'll be 
 
 - The `scripts/support/microsoft_graph_api` module (used for sending email via Microsoft Graph) additionally expects `APPLICATION_ID` and `CLIENT_SECRET` environment variables if you use its `send_message` function directly — set these in `.env` as well if needed.
 - The SQLite database and its `to_do` table are created automatically the first time a Recall page runs, using the path from `DB_DIR`.
+
+## License
+
+Copyright (c) 2026 Ayyappan Mani. All rights reserved.
+
+This code is proprietary and confidential. No part of it may be copied, modified, distributed, or used without prior written permission from the copyright holder.
