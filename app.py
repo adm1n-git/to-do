@@ -29,8 +29,8 @@ def main():
                 st.Page(page="scripts/recall/update.py", title="Update"),
                 st.Page(page="scripts/recall/tasks.py", title="Tasks")
             ],         
-            "Fix Text Pages": [
-                st.Page(page="scripts/fix-text/fix-text.py", title="Fix Text")
+            "Other Pages": [
+                st.Page(page="scripts/others/fix-text.py", title="Fix Text")
             ]
         },
         position = "top"

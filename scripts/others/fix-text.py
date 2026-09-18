@@ -18,22 +18,6 @@ def render_diff(text):
     return text
 
 def interact_with_language_model(text: str):
-    grammar_prompt = ChatPromptTemplate.from_template(
-        """
-        You are a grammar-correction assistant. Fix grammar, spelling, punctuation, and syntax errors in the given text.
-
-        Rules:
-
-        1. Preserve the original meaning, tone, and sentence structure — fix only what's incorrect.
-        2. If the text is already correct, return it unchanged.
-        3. Mark added words in **bold** and removed words in ~~strikethrough~~.
-        4. Return only the corrected text, no explanations.
-        5. Respond in Markdown format.
-
-        Text: {text}
-        """
-    )
-
     rephrase_prompt = ChatPromptTemplate.from_template(
         """
         You are a writing assistant. Fix grammar, spelling, punctuation, and syntax errors in the given text, and rephrase it only where needed to improve clarity, flow, or naturalness.
@@ -47,7 +31,6 @@ def interact_with_language_model(text: str):
         5. Return only the corrected/rephrased text, no explanations.
         6. Respond in Markdown format.
 
-
         Text: {text}
         """
     )
@@ -60,16 +43,8 @@ def interact_with_language_model(text: str):
         max_retries = 2
     )
 
-    parallel_chain = RunnableParallel(
-        grammar_chain = grammar_prompt | model | StrOutputParser(),
-        rephrase_chain = rephrase_prompt | model | StrOutputParser()
-    )
-    
-    return parallel_chain.invoke(
-        {
-            "text": text
-        }
-    )
+    rephrase_chain = rephrase_prompt | model | StrOutputParser()
+    return rephrase_chain.invoke({"text": text})
 
 def main():
     # configure streamlit page
@@ -87,21 +62,10 @@ def main():
         with text_container.spinner(text="**Analyzing text with AI model..**"):
             response = interact_with_language_model(text)
 
-        grammar_container = st.container(border=True)
-        grammar_container.markdown("**Corrected Text:**")
-        grammar_container.markdown(
-            render_diff(
-                response.get("grammar_chain")
-            ),
-            unsafe_allow_html = True
-        )
-
-        grammar_container = st.container(border=True)
-        grammar_container.markdown("**Rephrased Text:**")
-        grammar_container.markdown(
-            render_diff(
-                response.get("rephrase_chain")
-            ),
+        response_container = st.container(border=True)
+        response_container.markdown("**Corrected Text:**")
+        response_container.markdown(
+            render_diff(response),
             unsafe_allow_html = True
         )
 
