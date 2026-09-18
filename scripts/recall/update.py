@@ -12,13 +12,7 @@ import streamlit as st
 
 import sys
 sys.path.append(PROJECT_DIR)
-from support import sqlite_database
-
-def dt2str(dt):
-    return dt.strftime(r"%Y-%m-%d %H:%M:%S")
-
-def str2dt(str):
-    return datetime.strptime(str, r"%Y-%m-%d %H:%M:%S")
+from support import sqlite_database, dt2str, str2dt
 
 def add(topic: str):
     # create an SQLite table to_do with id, topic, created_at and recall days columns
