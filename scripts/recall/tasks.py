@@ -75,12 +75,14 @@ def reset_recall_day_flag(id: int):
                 day_30=0,
                 day_90=0,
                 day_180=0,
-                day_365=0
+                day_365=0,
+                created_at=:created_at
             WHERE id=:id
             """,
 
         parameters= {
-            "id": id
+            "id": id,
+            "created_at": dt2str(datetime.now())
         }
     )
 
