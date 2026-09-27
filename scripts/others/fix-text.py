@@ -58,7 +58,7 @@ def main():
     text_container = st.container(border=True)
     text_container.markdown("**Text:**")
     text = text_container.text_area(label="**Text:**", label_visibility="collapsed")
-    if text_container.button("**Fix Text**", type="primary"):
+    if text_container.button("**Fix Text**", key=f"fix_text"):
         with text_container.spinner(text="**Analyzing text with AI model..**"):
             response = interact_with_language_model(text)
 

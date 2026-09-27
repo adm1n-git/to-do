@@ -61,6 +61,20 @@ def change_recall_day_flag(day: str, id: int):
         }
     )
 
+def drop(id: int):
+    # delete the rows which are not required
+
+    db.exec_query(
+        query = 
+            f"""
+            DELETE FROM to_do WHERE id=:id
+            """,
+
+        parameters = {
+            "id": id
+        }
+    )
+
 def reset_recall_day_flag(id: int):
     # update the day flags for the given row
 
@@ -124,12 +138,16 @@ def main():
                     """
                 )
 
-                if inner_container.button("**I Remembered**", type="primary", key=f"remembered_{id}"):
+                if inner_container.button("**Remembered**", key=f"remembered_{id}"):
                     change_recall_day_flag(day=day_str, id=id)
                     st.rerun()
 
-                if inner_container.button("**I Forgot**", type="secondary", key=f"forgot_{id}"):
+                if inner_container.button("**Forgot**", key=f"forgot_{id}"):
                     reset_recall_day_flag(id=id)
+                    st.rerun()
+
+                if inner_container.button("**Drop**", key=f"drop_{id}"):
+                    drop(id=id)
                     st.rerun()
 
                 break
