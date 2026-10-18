@@ -1,4 +1,4 @@
-# import python3 modules
+# import Python and Streamlit modules
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -15,7 +15,11 @@ sys.path.append(PROJECT_DIR)
 from support import sqlite_database, dt2str, str2dt
 
 def add(topic: str):
-    # create an SQLite table to_do with id, topic, created_at and recall days columns
+    """
+    The function will create an SQLite table called to_do and then add the topic into the database.
+    """
+
+    # create an SQLite table called to_do with id, topic, created_at, and recall_days columns
 
     db.exec_query(
         query = 
@@ -36,7 +40,7 @@ def add(topic: str):
             """
     )
 
-    # add the topic into the database
+    # add the topic to the database
 
     db.exec_query(
         query = 
@@ -52,7 +56,11 @@ def add(topic: str):
     )
 
 def get(topic: str):
-    # get the records related with the topic
+    """
+    The function will retrieve the list of database records related to the topic.
+    """
+
+    # get the records related to the topic
 
     records = db.exec_query(
         query = 
@@ -68,7 +76,12 @@ def get(topic: str):
     return records
 
 def main():
-    # configure streamlit page
+    """
+    The function will get the topic and add it to the database.
+    Finally, the script will retrieve the DB record for the inserted topic and display it. 
+    """
+
+    # configure the streamlit page
 
     st.set_page_config(
         page_title = "Recall — Spaced Repetition Study Tracker",
@@ -80,11 +93,11 @@ def main():
     topic = inner_container.text_input(label="**Recall Topic:**")
 
     if inner_container.button("Submit"):
-        # add the topic into the database
+        # add the topic to the database
 
         add(topic)
 
-        # get the db records related with the topic
+        # get the db records related to the topic
 
         record = get(topic)[0]
         st.info(
