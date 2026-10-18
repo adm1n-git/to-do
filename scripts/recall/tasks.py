@@ -1,4 +1,4 @@
-# import python3 modules
+# import Python and Streamlit modules
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -15,7 +15,11 @@ sys.path.append(PROJECT_DIR)
 from support import sqlite_database, dt2str, str2dt
 
 def get():
-    # create an SQLite table to_do with id, topic, created_at and recall days columns
+    """
+    The function will retrieve and return the database records.
+    """
+
+    # create an SQLite table called to_do with id, topic, created_at and recall days columns
 
     db.exec_query(
         query = 
@@ -47,8 +51,12 @@ def get():
 
     return records
 
-def change_recall_day_flag(day: str, id: int):
-    # update the day flag for the record id
+def update(day: str, id: int):
+    """
+    The function will change the remember flag from 0 to 1 for the given day.
+    """
+
+    # update the day flag for the record ID
 
     db.exec_query(
         query = 
@@ -62,7 +70,11 @@ def change_recall_day_flag(day: str, id: int):
     )
 
 def drop(id: int):
-    # delete the rows which are not required
+    """
+    The function will delete the database record of the given record ID.
+    """
+
+    # delete the rows that are not required
 
     db.exec_query(
         query = 
@@ -75,8 +87,12 @@ def drop(id: int):
         }
     )
 
-def reset_recall_day_flag(id: int):
-    # update the day flags for the given row
+def reset(id: int):
+    """
+    The function will reset the remember flag from 1 to 0 for the given record ID.
+    """
+
+    # reset the day flags for the given row
 
     db.exec_query(
         query = 
@@ -101,7 +117,13 @@ def reset_recall_day_flag(id: int):
     )
 
 def main():
-    # configure streamlit page
+    """
+    The function will initially retrieve all database records.
+    A database record will be displayed if the record's created_at + recall cycle < current time.
+    The function provides Remembered, Forgot and Reset buttons to update the respective DB fields.
+    """
+
+    # configure the streamlit page
 
     st.set_page_config(
         page_title = "Recall — Spaced Repetition Study Tracker",
@@ -124,9 +146,9 @@ def main():
             id = record.get("id")
             recall_dt = str2dt(record.get("created_at")) + timedelta(days=day_int)
             today_dt = datetime.now()
-            recall_day_flag = record.get(day_str)
+            flag = record.get(day_str)
 
-            if (recall_dt <= today_dt) and (recall_day_flag != 1):
+            if (recall_dt <= today_dt) and (flag != 1):
                 inner_container = st.container(border=True)
                 inner_container.info(
                     f"""
@@ -139,11 +161,11 @@ def main():
                 )
 
                 if inner_container.button("**Remembered**", key=f"remembered_{id}"):
-                    change_recall_day_flag(day=day_str, id=id)
+                    update(day=day_str, id=id)
                     st.rerun()
 
                 if inner_container.button("**Forgot**", key=f"forgot_{id}"):
-                    reset_recall_day_flag(id=id)
+                    reset(id=id)
                     st.rerun()
 
                 if inner_container.button("**Drop**", key=f"drop_{id}"):
