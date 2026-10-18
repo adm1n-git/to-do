@@ -1,8 +1,12 @@
-# import python3 modules
+# import Python and Streamlit modules
 
 import streamlit as st
 
 def login():
+    """
+    The function will display the login page for the application.
+    """
+
     st.set_page_config(
         page_title="Login", 
         page_icon="🔒", 
@@ -14,6 +18,10 @@ def login():
     st.button("Log in with Microsoft", on_click=st.login)
 
 def main():
+    """
+    The function will handle the page navigation in the application.
+    """
+
     st.set_page_config(
         page_title = "Study & Writing Tools", 
         page_icon = ":dolphin:", 
