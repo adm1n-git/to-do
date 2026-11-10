@@ -26,9 +26,9 @@ def get():
             """
             CREATE TABLE IF NOT EXISTS to_do (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                topic TEXT UNIQUE,
-                user TEXT,
-                created_at TEXT,
+                topic TEXT NOT NULL,
+                user TEXT NOT NULL,
+                created_at TEXT NOT NULL,
                 day_1 INTEGER DEFAULT 0,
                 day_3 INTEGER DEFAULT 0,
                 day_7 INTEGER DEFAULT 0,
@@ -36,7 +36,8 @@ def get():
                 day_30 INTEGER DEFAULT 0,
                 day_90 INTEGER DEFAULT 0,
                 day_180 INTEGER DEFAULT 0,
-                day_365 INTEGER DEFAULT 0
+                day_365 INTEGER DEFAULT 0,
+                UNIQUE (user, topic)
             )
             """
     )
@@ -181,4 +182,4 @@ def main():
 if __name__ == "__main__":
     db = sqlite_database(DB_DIR)
     main()
-    _ = db.close
+    _ = db.close()
