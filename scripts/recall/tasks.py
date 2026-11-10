@@ -27,6 +27,7 @@ def get():
             CREATE TABLE IF NOT EXISTS to_do (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 topic TEXT UNIQUE,
+                user TEXT,
                 created_at TEXT,
                 day_1 INTEGER DEFAULT 0,
                 day_3 INTEGER DEFAULT 0,
@@ -45,8 +46,13 @@ def get():
     records = db.exec_query(
         query = 
             """
-            SELECT * FROM to_do
-            """
+            SELECT * 
+            FROM to_do
+            WHERE user=:user
+            """,
+        parameters = {
+            "user": st.user.email
+        }
     )
 
     return records
@@ -61,11 +67,14 @@ def update(day: str, id: int):
     db.exec_query(
         query = 
             f"""
-            UPDATE to_do SET {day}=1 WHERE id=:id
+            UPDATE to_do 
+            SET {day}=1 
+            WHERE id=:id AND user=:user
             """,
 
         parameters = {
-            "id": id
+            "id": id,
+            "user": st.user.email
         }
     )
 
@@ -79,11 +88,13 @@ def drop(id: int):
     db.exec_query(
         query = 
             f"""
-            DELETE FROM to_do WHERE id=:id
+            DELETE FROM to_do 
+            WHERE id=:id AND user=:user
             """,
 
         parameters = {
-            "id": id
+            "id": id,
+            "user": st.user.email
         }
     )
 
@@ -98,21 +109,14 @@ def reset(id: int):
         query = 
             """
             UPDATE to_do 
-            SET day_1=0, 
-                day_3=0,
-                day_7=0,
-                day_14=0,
-                day_30=0,
-                day_90=0,
-                day_180=0,
-                day_365=0,
-                created_at=:created_at
-            WHERE id=:id
+            SET day_1=0, day_3=0, day_7=0, day_14=0, day_30=0, day_90=0, day_180=0, day_365=0, created_at=:created_at
+            WHERE id=:id AND user=:user
             """,
 
         parameters= {
             "id": id,
-            "created_at": dt2str(datetime.now())
+            "created_at": dt2str(datetime.now()),
+            "user": st.user.email
         }
     )
 

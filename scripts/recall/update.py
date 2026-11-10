@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-PROJECT_DIR=os.environ.get("PROJECT_DIR")
-DB_DIR=os.environ.get("DB_DIR")
+PROJECT_DIR = os.environ.get("PROJECT_DIR")
+DB_DIR = os.environ.get("DB_DIR")
 
 from datetime import datetime
 import streamlit as st
@@ -27,6 +27,7 @@ def add(topic: str):
             CREATE TABLE IF NOT EXISTS to_do (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 topic TEXT UNIQUE,
+                user TEXT,
                 created_at TEXT,
                 day_1 INTEGER DEFAULT 0,
                 day_3 INTEGER DEFAULT 0,
@@ -45,12 +46,13 @@ def add(topic: str):
     db.exec_query(
         query = 
             """
-            INSERT INTO to_do (topic, created_at) VALUES (:topic, :created_at)
-            ON CONFLICT(topic) DO NOTHING
+            INSERT OR IGNORE INTO to_do (topic, user, created_at)
+            VALUES (:topic, :user, :created_at)
             """,
 
         parameters = {
             "topic": topic,
+            "user": st.user.email,
             "created_at" : dt2str(datetime.now())  
         }
     )
@@ -65,11 +67,15 @@ def get(topic: str):
     records = db.exec_query(
         query = 
             """
-            SELECT * FROM to_do WHERE topic=:topic LIMIT 1
+            SELECT * 
+            FROM to_do 
+            WHERE topic=:topic and user=:user 
+            LIMIT 1
             """,
 
         parameters = {
-            "topic": topic
+            "topic": topic,
+            "user": st.user.email
         }
     )
 
